@@ -1,5 +1,8 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useHttp } from '../../hooks/use-http';
+import { AuthActions } from '../../store/actions/auth-actions';
+import { useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 
 import LoadingSpinner from '../UI/LoadingSpinner';
 
@@ -8,10 +11,20 @@ import classes from './AuthForm.module.css';
 let url = '';
 
 const AuthForm = () => {
+  const dispatch = useDispatch();
+  const history = useHistory();
+
   const emailInputRef = useRef();
   const pwdInputRef = useRef();
   const [isLogin, setIsLogin] = useState(true);
   const { isLoading, error, responseData, sendRequest: userAuth } = useHttp();
+
+  useEffect(() => {
+    if (responseData && !error) {
+      dispatch(AuthActions.login(responseData.idToken));
+      history.replace('/profile');
+    }
+  }, [responseData, error, dispatch, history]);
 
   const switchModeHandler = () => {
     setIsLogin((prevState) => !prevState);

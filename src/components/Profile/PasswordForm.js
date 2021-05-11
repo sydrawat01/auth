@@ -1,17 +1,37 @@
+import { useRef } from 'react';
+import { useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import { AuthActions } from '../../store/actions/auth-actions';
+
 import classes from './PasswordForm.module.css';
 
 import LoadingSpinner from '../UI/LoadingSpinner';
 
-const PasswordForm = () => {
+const PasswordForm = (props) => {
+  const pwdInputRef = useRef();
+  const dispatch = useDispatch();
+  const history = useHistory();
+
+  const submitFormHandler = (event) => {
+    event.preventDefault();
+    const newPwd = pwdInputRef.current.value;
+    // ADD: password validation
+    props.onChangePassword(newPwd);
+    if (!props.error && !props.isLoading) {
+      dispatch(AuthActions.logout());
+      history.replace('/auth');
+    }
+  };
   return (
     <>
-      <form className={classes.form}>
+      <form className={classes.form} onSubmit={submitFormHandler}>
         <div className={classes.control}>
           <label htmlFor="new-password">New Password</label>
-          <input type="password" id="new-password" />
+          <input type="password" id="new-password" ref={pwdInputRef} />
         </div>
         <div className={classes.action}>
-          <button>Change Password</button>
+          {!props.isLoading && <button>Change Password</button>}
+          {props.isLoading && <LoadingSpinner />}
         </div>
       </form>
     </>

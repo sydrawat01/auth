@@ -14,7 +14,7 @@ export const useHttp = () => {
         body: reqConfig.body ? JSON.stringify(reqConfig.body) : null,
         headers: reqConfig.headers ? reqConfig.headers : {},
       });
-      const data = response.json();
+      const data = await response.json();
       if (!response.ok) {
         let errorMessage = 'unknown error occurred!';
         if (data.error) {
