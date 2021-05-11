@@ -1,7 +1,19 @@
 import classes from './PasswordForm.module.css';
 
 const PasswordForm = () => {
-  return <h3>This is the password form</h3>;
+  return (
+    <>
+      <form className={classes.form}>
+        <div className={classes.control}>
+          <label htmlFor="new-password">New Password</label>
+          <input type="password" id="new-password" />
+        </div>
+        <div className={classes.action}>
+          <button>Change Password</button>
+        </div>
+      </form>
+    </>
+  );
 };
 
 export default PasswordForm;
