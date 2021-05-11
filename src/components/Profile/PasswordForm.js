@@ -1,5 +1,7 @@
 import classes from './PasswordForm.module.css';
 
+import LoadingSpinner from '../UI/LoadingSpinner';
+
 const PasswordForm = () => {
   return (
     <>

@@ -1,9 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
+import { useHttp } from '../../hooks/use-http';
+
+import LoadingSpinner from '../UI/LoadingSpinner';
 
 import classes from './AuthForm.module.css';
 
+let url = '';
+
 const AuthForm = () => {
+  const emailInputRef = useRef();
+  const pwdInputRef = useRef();
   const [isLogin, setIsLogin] = useState(true);
+  const { isLoading, error, responseData, sendRequest: userAuth } = useHttp();
 
   const switchModeHandler = () => {
     setIsLogin((prevState) => !prevState);
@@ -11,6 +19,26 @@ const AuthForm = () => {
 
   const submitFormHandler = (event) => {
     event.preventDefault();
+    const enteredEmail = emailInputRef.current.value;
+    const enteredPwd = pwdInputRef.current.value;
+
+    if (isLogin) {
+      url = process.env.REACT_APP_SIGN_IN;
+    } else {
+      url = process.env.REACT_APP_SIGN_UP;
+    }
+    userAuth({
+      url,
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: {
+        email: enteredEmail,
+        password: enteredPwd,
+        returnSecureToken: true,
+      },
+    });
   };
   return (
     <>
@@ -19,15 +47,20 @@ const AuthForm = () => {
         <form onSubmit={submitFormHandler}>
           <div className={classes.control}>
             <label htmlFor="email">E-mail</label>
-            <input type="email" id="email" />
+            <input type="email" id="email" ref={emailInputRef} />
           </div>
           <div className={classes.control}>
             <label htmlFor="pwd">Password</label>
-            <input type="password" id="pwd" />
+            <input type="password" id="pwd" ref={pwdInputRef} />
           </div>
           <div className={classes.actions}>
-            <button>{isLogin ? 'Sign In' : 'Sign Up'}</button>
-            <button onClick={switchModeHandler} className={classes.toggle}>
+            {!isLoading && <button>{isLogin ? 'Sign In' : 'Sign Up'}</button>}
+            {isLoading && <LoadingSpinner />}
+            <button
+              type="button"
+              onClick={switchModeHandler}
+              className={classes.toggle}
+            >
               {isLogin
                 ? 'Create new account'
                 : 'Continue with existing account'}
