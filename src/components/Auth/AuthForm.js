@@ -34,7 +34,7 @@ const AuthForm = () => {
     event.preventDefault();
     const enteredEmail = emailInputRef.current.value;
     const enteredPwd = pwdInputRef.current.value;
-
+    // ADD: Email and password validation
     if (isLogin) {
       url = process.env.REACT_APP_SIGN_IN;
     } else {
