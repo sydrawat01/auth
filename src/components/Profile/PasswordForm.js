@@ -1,7 +1,4 @@
 import { useRef } from 'react';
-import { useDispatch } from 'react-redux';
-import { useHistory } from 'react-router-dom';
-import { AuthActions } from '../../store/actions/auth-actions';
 
 import classes from './PasswordForm.module.css';
 
@@ -9,18 +6,12 @@ import LoadingSpinner from '../UI/LoadingSpinner';
 
 const PasswordForm = (props) => {
   const pwdInputRef = useRef();
-  const dispatch = useDispatch();
-  const history = useHistory();
 
   const submitFormHandler = (event) => {
     event.preventDefault();
     const newPwd = pwdInputRef.current.value;
     // ADD: password validation
     props.onChangePassword(newPwd);
-    if (!props.error && !props.isLoading) {
-      dispatch(AuthActions.logout());
-      history.replace('/auth');
-    }
   };
   return (
     <>

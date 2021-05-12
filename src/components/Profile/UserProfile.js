@@ -1,12 +1,23 @@
-import { useSelector } from 'react-redux';
+import { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { useHttp } from '../../hooks/use-http';
+import { AuthActions } from '../../store/actions/auth-actions';
+
 import PasswordForm from './PasswordForm';
 
 import classes from './UserProfile.module.css';
 
 const UserProfile = () => {
+  const dispatch = useDispatch();
   const { token } = useSelector((state) => state.auth);
-  const { isLoading, error, sendRequest: changePwd } = useHttp();
+  const { isLoading, error, responseData, sendRequest: changePwd } = useHttp();
+
+  useEffect(() => {
+    if (responseData && !error && !isLoading) {
+      dispatch(AuthActions.logout());
+    }
+  }, [responseData, error, isLoading, dispatch]);
+
   const passwordChangeHandler = async (newPwd) => {
     changePwd({
       url: process.env.REACT_APP_CHANGE_PWD,
