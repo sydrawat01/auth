@@ -22,5 +22,6 @@ REACT_APP_CHANGE_PWD = 'https://identitytoolkit.googleapis.com/v1/accounts:updat
 
 ## TODO
 
-- [ ] Use the `Modal` to display error messages.
-- [ ] [Fix Memory Leak Bug](https://github.com/sydrawat/auth/issues/1).
+- [x] Use the `Modal` to display error messages.
+- [x] [Fix Memory Leak Bug](https://github.com/sydrawat/auth/issues/1).
+- [ ] Add auto logout based on the expiration time [`expiresIn` property from the response payload].
