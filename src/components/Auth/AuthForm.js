@@ -5,12 +5,14 @@ import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 
 import LoadingSpinner from '../UI/LoadingSpinner';
+import Modal from '../UI/Modal';
 
 import classes from './AuthForm.module.css';
 
 let url = '';
 
 const AuthForm = () => {
+  const [showModal, setShowModal] = useState(false);
   const dispatch = useDispatch();
   const history = useHistory();
 
@@ -19,12 +21,18 @@ const AuthForm = () => {
   const [isLogin, setIsLogin] = useState(true);
   const { isLoading, error, responseData, sendRequest: userAuth } = useHttp();
 
+  const closeModalHandler = () => {
+    setShowModal(false);
+  };
+
   useEffect(() => {
-    if (responseData && !error) {
+    if (responseData && !error && !isLoading) {
       dispatch(AuthActions.login(responseData.idToken));
       history.replace('/profile');
+    } else {
+      setShowModal(true);
     }
-  }, [responseData, error, dispatch, history]);
+  }, [responseData, error, isLoading, dispatch, history]);
 
   const switchModeHandler = () => {
     setIsLogin((prevState) => !prevState);
@@ -53,6 +61,7 @@ const AuthForm = () => {
       },
     });
   };
+
   return (
     <>
       <section className={classes.auth}>
@@ -81,6 +90,9 @@ const AuthForm = () => {
           </div>
         </form>
       </section>
+      {error && !isLoading && showModal && (
+        <Modal onClose={closeModalHandler}>{error}</Modal>
+      )}
     </>
   );
 };
