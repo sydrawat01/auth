@@ -1,10 +1,12 @@
+import { FC } from 'react';
+
 import Navigation from './Navigation';
 
-const Layout = ({ children }) => {
+const Layout: FC = (props) => {
   return (
     <>
       <Navigation />
-      <main>{children}</main>
+      <main>{props.children}</main>
     </>
   );
 };

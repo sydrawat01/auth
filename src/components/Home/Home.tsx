@@ -1,6 +1,8 @@
+import { FC } from 'react';
+
 import classes from './Home.module.css';
 
-const Home = () => {
+const Home: FC = () => {
   return (
     <section className={classes.home}>
       <h1>Home Page</h1>

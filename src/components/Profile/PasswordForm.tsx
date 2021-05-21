@@ -1,15 +1,18 @@
-import { useRef } from 'react';
+import { FC, FormEvent, useRef } from 'react';
 
 import classes from './PasswordForm.module.css';
 
 import LoadingSpinner from '../UI/LoadingSpinner';
 
-const PasswordForm = (props) => {
-  const pwdInputRef = useRef();
+const PasswordForm: FC<{
+  onChangePassword: (pwd: string) => void;
+  isLoading: boolean;
+}> = (props) => {
+  const pwdInputRef = useRef<HTMLInputElement>(null);
 
-  const submitFormHandler = (event) => {
+  const submitFormHandler = (event: FormEvent) => {
     event.preventDefault();
-    const newPwd = pwdInputRef.current.value;
+    const newPwd = pwdInputRef.current!.value;
     // ADD: password validation
     props.onChangePassword(newPwd);
   };
